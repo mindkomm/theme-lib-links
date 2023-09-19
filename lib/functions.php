@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Converts an URL to an anchor link.
  *
@@ -15,8 +17,9 @@
  * @param string $url URL to turn into an anchor link.
  * @return string The updated URL.
  */
-function make_anchor_link( $url ) {
-	return untrailingslashit( preg_replace( '/[^\/]+(?=\/$|$)/i', '#$0', $url ) );
+function make_anchor_link($url)
+{
+    return untrailingslashit(preg_replace('/[^\/]+(?=\/$|$)/i', '#$0', $url));
 }
 
 /**
@@ -39,15 +42,16 @@ function make_anchor_link( $url ) {
  * @param string $url URL to be parsed.
  * @return bool Whether the URL is external.
  */
-function is_external_url( $url ) {
-	$link_url = wp_parse_url( $url );
-	$home_url = wp_parse_url( home_url() );
+function is_external_url($url)
+{
+    $link_url = wp_parse_url($url);
+    $home_url = wp_parse_url(home_url());
 
-	if ( $link_url['host'] === $home_url['host'] ) {
-		return false;
-	}
+    if ($link_url['host'] === $home_url['host']) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -71,31 +75,32 @@ function is_external_url( $url ) {
  *
  * @return string The domain part of the URL.
  */
-function url_to_domain( $url, $strip_www = false, $limit = false ) {
-	$host = wp_parse_url( $url, PHP_URL_HOST );
+function url_to_domain($url, $strip_www = false, $limit = false)
+{
+    $host = wp_parse_url($url, PHP_URL_HOST);
 
-	/**
-	 * If the URL can't be parsed, use the original URL.
-	 * Change to "return false" if you don't want that.
-	 */
-	if ( ! $host ) {
-		$host = $url;
-	}
+    /**
+     * If the URL can't be parsed, use the original URL.
+     * Change to "return false" if you don't want that.
+     */
+    if (! $host) {
+        $host = $url;
+    }
 
-	/**
-	 * The "www." prefix isn't really needed if you're just using
-	 * this to display the domain to the user.
-	 */
-	if ( 'www.' === substr( $host, 0, 4 ) && $strip_www ) {
-		$host = substr( $host, 4 );
-	}
+    /**
+     * The "www." prefix isn't really needed if you're just using
+     * this to display the domain to the user.
+     */
+    if ('www.' === substr($host, 0, 4) && $strip_www) {
+        $host = substr($host, 4);
+    }
 
-	// You might also want to limit the length if screen space is limited
-	if ( $limit && strlen( $host ) > $limit ) {
-		$host = substr( $host, 0, $limit - 3 ) . '&hellip;';
-	}
+    // You might also want to limit the length if screen space is limited
+    if ($limit && strlen($host) > $limit) {
+        $host = substr($host, 0, $limit - 3) . '&hellip;';
+    }
 
-	return $host;
+    return $host;
 }
 
 /**
@@ -120,15 +125,16 @@ function url_to_domain( $url, $strip_www = false, $limit = false ) {
  * @return string|bool An href attribute with target and rel attributes, when necessary. Returns `false` if input
  *                     is empty.
  */
-function get_link_attributes( $url ) {
-	// Bail out if parameter URL is empty
-	if ( empty( $url ) ) {
-		return false;
-	}
+function get_link_attributes($url)
+{
+    // Bail out if parameter URL is empty
+    if (empty($url)) {
+        return false;
+    }
 
-	if ( is_external_url( $url ) ) {
-		return 'href="' . $url . '" target="_blank" rel="noopener noreferrer"';
-	} else {
-		return 'href="' . $url . '"';
-	}
+    if (is_external_url($url)) {
+        return 'href="' . $url . '" target="_blank" rel="noopener noreferrer"';
+    } else {
+        return 'href="' . $url . '"';
+    }
 }
